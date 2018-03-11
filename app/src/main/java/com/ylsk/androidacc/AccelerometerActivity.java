@@ -8,6 +8,10 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.ylsk.apache.math.fft.*;
+
+import junit.framework.Test;
+
 public class AccelerometerActivity extends BaseSensorActivity {
     private TextView mTvInfo;
     private float mGravity = SensorManager.STANDARD_GRAVITY-0.8f;
@@ -15,6 +19,12 @@ public class AccelerometerActivity extends BaseSensorActivity {
     private int index = 0;
     private long starttime = System.currentTimeMillis();
     private long endtime = System.currentTimeMillis();
+
+    // x,y,z,和总的加速度模采样数据。
+    private double[] xValues = new double[128];
+    private double[] yValues = new double[128];
+    private double[] zValues = new double[128];
+    private double[] accValues = new double[128];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +49,23 @@ public class AccelerometerActivity extends BaseSensorActivity {
         float xValue = sensorEvent.values[0];// Acceleration minus Gx on the x-axis
         float yValue = sensorEvent.values[1];//Acceleration minus Gy on the y-axis
         float zValue = sensorEvent.values[2];//values[2]: Acceleration minus Gz on the z-axis
-        Log.d("加速度信息"+(this.index++)+"|"+System.currentTimeMillis()+"| :","x："+xValue+", y："+yValue+ ", z： "+zValue);
+        Log.d("加速度信息"+(this.index)+"|"+System.currentTimeMillis()+"| :","x："+xValue+", y："+yValue+ ", z： "+zValue);
 
         this.endtime = System.currentTimeMillis();
 
         float fps  = 0.0f;
+        double x = Math.sqrt(xValue*xValue);
+        double y = Math.sqrt(yValue*yValue);
+        double z = Math.sqrt(zValue*zValue);
+        double acc = Math.sqrt(xValue*xValue + yValue*yValue + zValue*zValue);
+
+        if(this.index >=0 && this.index < 128) {
+            this.xValues[this.index] = x;
+            this.yValues[this.index] = y;
+            this.zValues[this.index] = z;
+            this.accValues[this.index] = acc;
+        }
+
         if(this.endtime - this.starttime > 0) {
             fps = (this.index*1000 / (this.endtime - this.starttime));
             Log.d("加速度信息" + (this.index) + "| 实时统计信息 | :", "时长：" + (this.endtime - this.starttime) + ", 次数：" + this.index + ", 每秒平均值：" + fps);
@@ -70,6 +92,20 @@ public class AccelerometerActivity extends BaseSensorActivity {
         } else if(zValue < -mGravity) {
             mTvInfo.append("\n屏幕朝下");
         }
+
+        if(this.index == 128)
+        {
+            this.index = 0;
+            this.starttime = System.currentTimeMillis();
+            this.endtime = System.currentTimeMillis();
+
+            CalcFFT fft = new CalcFFT(this.accValues);
+            TestThread th = new TestThread(fft);
+            th.setName("Thread-"+System.currentTimeMillis());
+            th.start();
+        }
+
+        this.index++;
     }
 
     @Override
@@ -99,8 +135,8 @@ public class AccelerometerActivity extends BaseSensorActivity {
         //return SensorManager.SENSOR_DELAY_NORMAL;
 
         // 采样频率设计为128Hz： 1000000/128 = 7,812.5, 定位 7812
-        //return 7812; //124
+        return 7812; //124
 
-        return SensorManager.SENSOR_DELAY_FASTEST;
+        //return SensorManager.SENSOR_DELAY_FASTEST;
     }
 }
