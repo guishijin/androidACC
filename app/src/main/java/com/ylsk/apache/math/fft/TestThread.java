@@ -1,9 +1,5 @@
 package com.ylsk.apache.math.fft;
 
-import android.util.Log;
-
-import org.apache.commons.math3.complex.Complex;
-
 import java.io.FileOutputStream;
 import java.util.List;
 
@@ -44,19 +40,19 @@ public class TestThread extends Thread {
             }
             fos.flush();
 
-            // 变换后数据 写入
-            String info2 = "变换后数据：\r\n";
-            fos.write(info2.getBytes());
-
-            Complex[] result = (Complex[])this.fft.run(params);
-
-            for(Complex data : result)
-            {
-                Log.d("傅里叶变换结果:",data.abs() + " | " + data.toString());
-                String line = "傅里叶变换结果:"+data.abs() + " | " + data.toString()+"\r\n";
-                fos.write(line.getBytes());
-            }
-            fos.flush();
+//            // 变换后数据 写入
+//            String info2 = "变换后数据：\r\n";
+//            fos.write(info2.getBytes());
+//
+//            Complex[] result = (Complex[])this.fft.run(params);
+//
+//            for(Complex data : result)
+//            {
+//                Log.d("傅里叶变换结果:",data.abs() + " | " + data.toString());
+//                String line = "傅里叶变换结果:"+data.abs() + " | " + data.toString()+"\r\n";
+//                fos.write(line.getBytes());
+//            }
+//            fos.flush();
             fos.close();
         } catch (Exception e) {
             e.printStackTrace();
