@@ -33,7 +33,7 @@ public class AccelerometerActivity extends BaseSensorActivity {
     private float speed;
 
     // 采样频率
-    private int hz = 1000;
+    private int hz = 200;
     private TextView mTvInfo;
     private float mGravity = SensorManager.STANDARD_GRAVITY - 0.8f;
 
@@ -143,7 +143,7 @@ public class AccelerometerActivity extends BaseSensorActivity {
         float sValue = this.speed;
         long curtime = sensorEvent.timestamp / 1000000;
         long systime = System.currentTimeMillis();
-        String lineinfotem = "{x:%s,y:%s,z:%s,speed:%s,timestamp:%s,systime:%s},\r\n";
+        String lineinfotem = "{\"x\":%s,\"y\":%s,\"z\":%s,\"speed\":%s,\"timestamp\":%s,\"systime\":%s},\r\n";
         String lineinfoval = String.format(lineinfotem,xValue,yValue,zValue,sValue,curtime,systime);
         try {
             if(fos!= null) {
