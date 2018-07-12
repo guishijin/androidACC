@@ -130,6 +130,7 @@ public class RotationVectorDemo extends Activity {
 
         public void onSurfaceChanged(GL10 gl, int width, int height) {
             // 设置视图端口
+            gl.glViewport(width/4, height/4, width/2, height/2);
             gl.glViewport(0, 0, width, height);
             //设置投影矩阵
             float ratio = (float) width / height;
@@ -143,7 +144,8 @@ public class RotationVectorDemo extends Activity {
             // dither是默认启用的，我们不需要它
             gl.glDisable(GL10.GL_DITHER);
             // 清除屏幕
-            gl.glClearColor(1, 1, 1, 1);
+            //gl.glClearColor(1, 1, 1, 1); // 白色背景
+            gl.glClearColor(0, 0, 0, 1); // 黑色背景
         }
 
 
@@ -157,18 +159,40 @@ public class RotationVectorDemo extends Activity {
 
             public Cube() {
                 final float vertices[] = {
-                        -1, -1, -1, 1, -1, -1,
-                        1, 1, -1, -1, 1, -1,
-                        -1, -1, 1, 1, -1, 1,
-                        1, 1, 1, -1, 1, 1,
+                        -1, -1, -1,
+                         1, -1, -1,
+                         1,  1, -1,
+                        -1,  1, -1,
+                        -1, -1,  1,
+                         1, -1,  1,
+                         1,  1,  1,
+                        -1,  1,  1,
                 };
 
 
+                // RED/GREEN/BLUE/ALPHA
+//                final float colors[] = {
+//                        0, 0, 0, 1,
+//                        1, 0, 0, 1,
+//                        1, 1, 0, 1,
+//                        0, 1, 0, 1,
+//
+//                        0, 0, 1, 1,
+//                        1, 0, 1, 1,
+//                        1, 1, 1, 1,
+//                        0, 1, 1, 1,
+//                };
+
                 final float colors[] = {
-                        0, 0, 0, 1, 1, 0, 0, 1,
-                        1, 1, 0, 1, 0, 1, 0, 1,
-                        0, 0, 1, 1, 1, 0, 1, 1,
-                        1, 1, 1, 1, 0, 1, 1, 1,
+                        1, 0, 0, 1,    // 0
+                        1, 0, 0, 1,    // 1
+                        0, 1, 0, 1,    // 2
+                        0, 1, 0, 1,    // 3
+
+                        0, 0, 1, 1,    // 4
+                        0, 0, 1, 1,    // 5
+                        1, 1, 1, 1,    // 6
+                        1, 1, 1, 1,    // 7
                 };
 
 
