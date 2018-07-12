@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
@@ -22,23 +22,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
-            android:name="com.ylsk.androidacc.OrientationActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:name=".OrientationActivity"
+            android:screenOrientation="portrait" />
         <activity
-            android:name="com.ylsk.androidacc.AccelerometerActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity android:name="com.ylsk.androidacc.GyroscopeActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity android:name="com.ylsk.androidacc.DeviceSensorInfoActivity"
-            android:screenOrientation="portrait">
-        </activity>
-
+            android:name=".AccelerometerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".GyroscopeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DeviceSensorInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".CompassActivity" />
+        <activity android:name=".RotationVectorDemo"></activity>
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@ package com.ylsk.androidacc;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
@@ -33,7 +34,10 @@ public class OrientationActivity extends BaseSensorActivity {
         // with positive values when the z-axis moves toward the y-axis.
         float zValue = sensorEvent.values[2];//Roll, rotation around the y-axis (-90 to 90)
         // increasing as the device moves clockwise.
-        mTvInfo.setText("x轴： "+xValue+"  y轴： "+yValue+"  z轴： "+zValue);
+        mTvInfo.setText("\n------------------------------------");
+        mTvInfo.append("\n  x轴： "+xValue+"\n  y轴： "+yValue+"\n  z轴： "+zValue);
+        mTvInfo.append("\n------------------------------------");
+        //mTvInfo.append("\n SensorManager.getOrientation() = "+ SensorManager.getOrientation());
     }
 
     @Override

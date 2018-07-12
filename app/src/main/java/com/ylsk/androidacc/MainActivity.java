@@ -67,6 +67,15 @@ public class MainActivity extends Activity {
                         intent.setClass(MainActivity.this, AccelerometerActivity.class);
                         startActivity(intent);
                         break;
+                    case 4://CompassActivity - 加速度传感器
+                        intent.setClass(MainActivity.this, CompassActivity.class);
+                        startActivity(intent);
+                        break;
+
+                    case 5://RotationVectorDemo - 加速度传感器
+                        intent.setClass(MainActivity.this, RotationVectorDemo.class);
+                        startActivity(intent);
+                        break;
                 }
             }
         });

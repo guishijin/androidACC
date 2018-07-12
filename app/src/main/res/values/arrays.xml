@@ -5,5 +5,7 @@
         <item>方向传感器</item>
         <item>陀螺仪</item>
         <item>加速度传感器</item>
+        <item>getOrientation方法实现</item>
+        <item>角度传感器</item>
     </string-array>
 </resources>
