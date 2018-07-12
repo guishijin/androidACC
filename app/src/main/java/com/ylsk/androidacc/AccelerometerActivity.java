@@ -284,4 +284,48 @@ public class AccelerometerActivity extends BaseSensorActivity {
             mWakeLock.release();
         }
     }
+
+    // 权限请求响应码
+    private static final int  REQUEST_WRITE_EXTERNAL_STORAGE = 1;
+    /**
+     * 检查文件读写权限
+     */
+    private void checkPermission() {
+        //检查权限（NEED_PERMISSION）是否被授权 PackageManager.PERMISSION_GRANTED表示同意授权
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            //用户已经拒绝过一次，再次弹出权限申请对话框需要给用户一个解释
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission
+                    .WRITE_EXTERNAL_STORAGE)) {
+                Toast.makeText(this, "请开通相关权限，否则无法正常使用本应用！", Toast.LENGTH_SHORT).show();
+            }
+            //申请权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
+
+        } else {
+            Toast.makeText(this, "授权成功！", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                              int[] grantResults)
+    {
+        if(REQUEST_WRITE_EXTERNAL_STORAGE == requestCode)
+        {
+            Toast.makeText(this,"权限申请成功！Code = "+requestCode,Toast.LENGTH_SHORT);
+        }
+        else
+        {
+            Toast.makeText(this,"权限申请失败！Code = "+requestCode,Toast.LENGTH_SHORT);
+        }
+    }
+
+
 }

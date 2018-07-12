@@ -13,39 +13,57 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+/**
+ * 主页面
+ */
 public class MainActivity extends Activity {
 
+    // 定位服务管理器
     private LocationManager locationManager;
+    // 地理位置工具
     GeoLocationTool glt;
 
+    // 主页面功能列表
     private ListView mListView;
+
+    /**
+     * 页面创建事件
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // 获取列表控件
         mListView = (ListView)findViewById(R.id.main_list);
+
+        // 获取列表条目数组
         String[] features = getResources().getStringArray(R.array.sensors);
+        // 使用数组定义一个适配器
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,features);
+        // 使用适配器初始化列表控件
         mListView.setAdapter(adapter);
+        // 设置条目的单击事件
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Intent intent = new Intent();
                 switch (position) {
-                    case 0://sensor info
+                    case 0:// sensor info - 列举传感器信息
                         intent.setClass(MainActivity.this, DeviceSensorInfoActivity.class);
                         startActivity(intent);
                         break;
-                    case 1://orientation
+                    case 1://orientation - 水平方向传感器
                         intent.setClass(MainActivity.this, OrientationActivity.class);
                         startActivity(intent);
                         break;
-                    case 2://gyroscope
+                    case 2://gyroscope - 重力传感器
                         intent.setClass(MainActivity.this, GyroscopeActivity.class);
                         startActivity(intent);
                         break;
-                    case 3://accelerometer
+                    case 3://accelerometer - 加速度传感器
                         intent.setClass(MainActivity.this, AccelerometerActivity.class);
                         startActivity(intent);
                         break;
@@ -55,7 +73,6 @@ public class MainActivity extends Activity {
 
         // 获取位置管理服务
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -66,7 +83,6 @@ public class MainActivity extends Activity {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-
         glt = new GeoLocationTool(locationManager);
 
     }
