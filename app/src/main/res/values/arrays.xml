@@ -7,5 +7,7 @@
         <item>加速度传感器</item>
         <item>getOrientation方法实现</item>
         <item>角度传感器</item>
+        <item>惯性导航-计步器</item>
+        <item>车辆惯性导航基础测试</item>
     </string-array>
 </resources>

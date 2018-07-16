@@ -86,7 +86,7 @@ public class CompassActivity extends Activity implements SensorEventListener {
                 mTvInfo.append("\n l.y = " + linerAcceleration[1]);
                 mTvInfo.append("\n l.z = " + linerAcceleration[2]);
                 mTvInfo.append("\n====================");
-                mTvInfo.append("\n |l| = " + rm);
+                mTvInfo.append("\n |r| = " + rm);
                 mTvInfo.append("\n r.x = " + rotation[0]);
                 mTvInfo.append("\n r.y = " + rotation[1]);
                 mTvInfo.append("\n r.z = " + rotation[2]);

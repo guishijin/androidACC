@@ -13,6 +13,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.ylsk.inertialnavigation.activities.StepCounter;
+
 /**
  * 主页面
  */
@@ -76,6 +78,15 @@ public class MainActivity extends Activity {
                         intent.setClass(MainActivity.this, RotationVectorDemo.class);
                         startActivity(intent);
                         break;
+                    case 6://StepCounter - 惯性导航-计步器
+                        intent.setClass(MainActivity.this, StepCounter.class);
+                        startActivity(intent);
+                        break;
+                    case 7://NaviBase - 惯性导航-计步器
+                        intent.setClass(MainActivity.this, NaviBase.class);
+                        startActivity(intent);
+                        break;
+
                 }
             }
         });

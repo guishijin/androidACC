@@ -35,7 +35,13 @@
             android:name=".DeviceSensorInfoActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".CompassActivity" />
-        <activity android:name=".RotationVectorDemo"></activity>
+        <activity android:name=".RotationVectorDemo" />
+        <activity
+            android:name="com.ylsk.inertialnavigation.activities.StepCounter"
+            android:label="@string/title_activity_step_counter" />
+        <activity
+            android:name=".NaviBase"
+            android:label="@string/title_activity_navi_base"></activity>
     </application>
 
 </manifest>
