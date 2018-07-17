@@ -8,6 +8,9 @@ import android.widget.TextView;
 import com.ylsk.androidacc.R;
 import com.ylsk.inertialnavigation.sensors.Core;
 
+/**
+ * 计步器Activity
+ */
 public class StepCounter extends Activity implements Core.onStepUpdateListener {
 
     private String Tag = "StepCounter";

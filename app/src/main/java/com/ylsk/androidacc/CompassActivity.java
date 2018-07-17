@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.ylsk.inertialnavigation.representation.Matrix;
+
 /**
  *  SensorManager.getOrientation
  */
@@ -21,6 +23,7 @@ public class CompassActivity extends Activity implements SensorEventListener {
     private static final String TAG = "CompassActivity";
     //记录rotationMatrix矩阵值
     private float[] r = new float[9];
+    private float[] I = new float[9];
     //记录通过getOrientation()计算出来的方位横滚俯仰值
     private float[] values = new float[3];
 
@@ -45,13 +48,44 @@ public class CompassActivity extends Activity implements SensorEventListener {
         @Override
         public void handleMessage(Message msg) {
             float angle = 0;
+            float angleI = 0;
             if(gravity!=null && geomagnetic!=null) {
-                if(SensorManager.getRotationMatrix(r, null, gravity, geomagnetic)) {
+                if(SensorManager.getRotationMatrix(r, I, gravity, geomagnetic)) {
                     SensorManager.getOrientation(r, values);
                     float degree = (float) ( ( 360f + values[0] * 180f / Math.PI ) % 360 );
                     //Log.i(TAG, "计算出来的方位角＝" + degree);
                     angle = degree;
+                    // 地磁偏角，经过验证：对于世界坐标系的方向无意义。
+                    //angleI = (float)( (360f + SensorManager.getInclination(I)*180f / Math.PI)%360 );
+                    angleI = (float)( SensorManager.getInclination(I)*180f / Math.PI);
+
                 }
+
+                float[] r1 = new float[16];
+                SensorManager.getRotationMatrix(r1, null, gravity, geomagnetic);
+                float[] outg = new float[4];
+                float[] ing = new float[4];
+                ing[0] = gravity[0];
+                ing[1] = gravity[1];
+                ing[2] = gravity[2];
+                ing[3] = 0.0f;
+
+                /**
+                 * getRotationMatrix函数可以获取包含手机方向数据的数组R[ ]，
+                 * 用所得的数据 和 R的逆矩阵 相乘即可得到大地坐标系中的数据（官网上描述说R的逆矩阵就是R的转置矩阵）。
+                 * 参见：http://blog.csdn.net/android_qhdxuan/article/details/7454313
+                 */
+                float[] r2 = new float[16];
+                // 计算转置矩阵
+                Matrix.transposeM(r2,0,r1,0);
+
+                // 坐标转换
+                //Matrix.multiplyMV(outg,r1,ing);
+                Matrix.multiplyMV(outg,r2,ing);
+                Log.i(TAG,"==>> g(0,0,9.8)=?: r2 *gravity = ("+ outg[0]+","+outg[1]+","+outg[2]+","+outg[3]+")    |r2 * gravity|= " +Math.sqrt(outg[0]*outg[0]+outg[1]*outg[1]+outg[2]*outg[2]));
+                //Log.i(TAG,"============>>>>>>> g(0,0,9.8)=?: r*gravity :("+Math.sqrt(outg[0]*outg[0]+outg[1]*outg[1]+outg[2]*outg[2])+")");
+                // 结论：
+                // 获取到的重力加速度设备坐标系，通过* R的转置矩阵得到的向量就是地理坐标系的值。验证通过
             }
 
             if(acceleration != null && gravity != null && linerAcceleration != null && rotation != null)
@@ -65,11 +99,13 @@ public class CompassActivity extends Activity implements SensorEventListener {
                 float lm = (float)Math.sqrt(linerAcceleration[0]*linerAcceleration[0] + linerAcceleration[1]*linerAcceleration[1] + linerAcceleration[2]*linerAcceleration[2]);
                 float rm = (float)Math.sqrt(rotation[0]*rotation[0] + rotation[1]*rotation[1] + rotation[2]*rotation[2]);
 
-                Log.i(TAG,"\n==========: g="+gm+",   ("+acceleration[0]+","+acceleration[1]+","+acceleration[2]+") ,("+glx+","+gly+","+glz+")");
+                //Log.i(TAG,"\n==========: g="+gm+",   ("+acceleration[0]+","+acceleration[1]+","+acceleration[2]+") ,("+glx+","+gly+","+glz+")");
 
                 mTvInfo.setText("====================");
                 String anglestr = (angle+"").substring(0,(angle+"").indexOf("."));
-                mTvInfo.append("\n 磁场 \n angle = " + anglestr +"（度）");
+                String angleIstr = (angleI+"").substring(0,(angleI+"").indexOf("."));
+                mTvInfo.append("\n 磁场 \n angle = " + anglestr +"（度） ");
+                mTvInfo.append("\n 磁场 \n angleI= " + angleIstr +"（度） ");
                 mTvInfo.append("\n====================");
                 mTvInfo.append("\n |g| = " + gm);
                 mTvInfo.append("\n g.x = " + gravity[0]);
@@ -86,11 +122,25 @@ public class CompassActivity extends Activity implements SensorEventListener {
                 mTvInfo.append("\n l.y = " + linerAcceleration[1]);
                 mTvInfo.append("\n l.z = " + linerAcceleration[2]);
                 mTvInfo.append("\n====================");
+                float[] inR = new float[3];
+                float[] outR = new float[9];
+                inR[0] = linerAcceleration[0];
+                inR[1] = linerAcceleration[1];
+                inR[2] = linerAcceleration[2];
+                SensorManager.remapCoordinateSystem(r,SensorManager.AXIS_X,SensorManager.AXIS_Y,outR);
+                mTvInfo.append("\n outR.x = " + outR[0]);
+                mTvInfo.append("\n outR.y = " + outR[1]);
+                mTvInfo.append("\n outR.z = " + outR[2]);
+                mTvInfo.append("\n====================");
+                mTvInfo.append("\n====================");
                 mTvInfo.append("\n |r| = " + rm);
-                mTvInfo.append("\n r.x = " + rotation[0]);
-                mTvInfo.append("\n r.y = " + rotation[1]);
-                mTvInfo.append("\n r.z = " + rotation[2]);
+                mTvInfo.append("\n r.x = " + rotation[0] + " | " + r[0]);
+                mTvInfo.append("\n r.y = " + rotation[1] + " | " + r[1]);
+                mTvInfo.append("\n r.z = " + rotation[2] + " | " + r[2]);
+
+
                 //mTvInfo.append("\n ("+acceleration[0]+","+acceleration[1]+","+acceleration[2]+") \n ("+glx+","+gly+","+glz+")");
+
 
             }
         }
